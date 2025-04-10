@@ -4,12 +4,14 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "dev": "live-server public",
     "ts:compile": "swc scripts -d public/_build"
   },
   "devDependencies": {
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.11.18",
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "live-server": "^1.2.2"
   },
   "peerDependencies": {
     "typescript": "^5"
