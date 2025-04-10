@@ -3,11 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/_build/styles/globals.css">
   <title>Battleship</title>
 </head>
-<body class="">
-  <h1 class="text-3xl font-bold underline">Hello World</h1>
+<body class="flex justify-center min-h-screen items-center bg-blue text-black">
+  <div class="grid grid-cols-21 size-[31.5rem]">
+    <div class="grid grid-cols-subgrid col-start-2 col-span-20 justify-items-center">
+      <div class="col-span-2 text-sm font-semibold">1</div>
+      <div class="col-span-2 text-sm font-semibold">2</div>
+      <div class="col-span-2 text-sm font-semibold">3</div>
+      <div class="col-span-2 text-sm font-semibold">4</div>
+      <div class="col-span-2 text-sm font-semibold">5</div>
+      <div class="col-span-2 text-sm font-semibold">6</div>
+      <div class="col-span-2 text-sm font-semibold">7</div>
+      <div class="col-span-2 text-sm font-semibold">8</div>
+      <div class="col-span-2 text-sm font-semibold">9</div>
+      <div class="col-span-2 text-sm font-semibold">10</div>
+    </div>
+
+    <div class="grid grid-rows-subgrid row-start-2 row-span-20 items-center">
+      <div class="row-span-2 text-sm font-semibold">A</div>
+      <div class="row-span-2 text-sm font-semibold">B</div>
+      <div class="row-span-2 text-sm font-semibold">C</div>
+      <div class="row-span-2 text-sm font-semibold">D</div>
+      <div class="row-span-2 text-sm font-semibold">E</div>
+      <div class="row-span-2 text-sm font-semibold">F</div>
+      <div class="row-span-2 text-sm font-semibold">G</div>
+      <div class="row-span-2 text-sm font-semibold">H</div>
+      <div class="row-span-2 text-sm font-semibold">I</div>
+      <div class="row-span-2 text-sm font-semibold">J</div>
+    </div>
+
+    <div class="grid grid-cols-subgrid grid-rows-subgrid col-start-2 row-start-2 col-span-20 row-span-20 justify-items-center items-center">
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+      <div class="size-10 col-span-2 row-span-2 bg-white rounded-lg border-2 border-black shadow-[2px_2px_0px_#000]"></div>
+    </div>
+  </div>
+  
   <script src="/_build/scripts/main.js"></script>
 </body>
 </html>

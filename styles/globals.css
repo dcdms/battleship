@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@theme {
+  --color-blue: oklch(0.7 0.1462 261.72);
+  --color-red: oklch(0.75 0.1508 27.97);
+
+  --font-sans: "Inter", "sans-serif";
+}
