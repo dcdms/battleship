@@ -4,14 +4,18 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "live-server public",
-    "ts:compile": "swc scripts -d public/_build"
+    "start": "concurrently \"live-server public\" \"bun ts:compile -- --watch\" \"bun css:compile -- --watch\"",
+    "ts:compile": "swc scripts -d public/_build",
+    "css:compile": "tailwindcss -i styles/globals.css -o public/_build/styles/globals.css"
   },
   "devDependencies": {
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.11.18",
+    "@tailwindcss/cli": "^4.1.3",
     "@types/bun": "latest",
-    "live-server": "^1.2.2"
+    "concurrently": "^9.1.2",
+    "live-server": "^1.2.2",
+    "tailwindcss": "^4.1.3"
   },
   "peerDependencies": {
     "typescript": "^5"
