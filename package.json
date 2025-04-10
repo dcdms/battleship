@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"live-server public\" \"bun ts:compile -- --watch\" \"bun css:compile -- --watch\"",
+    "build": "bun ts:compile && bun css:compile",
     "ts:compile": "swc scripts -d public/_build",
     "css:compile": "tailwindcss -i styles/globals.css -o public/_build/styles/globals.css"
   },
@@ -15,9 +16,7 @@
     "@types/bun": "latest",
     "concurrently": "^9.1.2",
     "live-server": "^1.2.2",
-    "tailwindcss": "^4.1.3"
-  },
-  "peerDependencies": {
+    "tailwindcss": "^4.1.3",
     "typescript": "^5"
   }
 }
