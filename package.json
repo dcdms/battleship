@@ -10,6 +10,7 @@
     "css:compile": "tailwindcss -i styles/globals.css -o public/_build/styles/globals.css"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.0.0-beta.1",
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.11.18",
     "@tailwindcss/cli": "^4.1.3",
