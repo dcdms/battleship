@@ -11,15 +11,12 @@ type WebSocketMessage =
   | {
       event: 'room.entered'
       data: {
-        player: {
-          id: number
-          filled_board_cells: number[]
-          ships: {
-            starts_at: number
-            direction: 'up' | 'right' | 'down' | 'left'
-            length: 1 | 2 | 3 | 4
-          }[]
-        }
+        has_opponent: boolean
+        ships: {
+          starts_at: number
+          direction: 'up' | 'right' | 'down' | 'left'
+          length: 1 | 2 | 3 | 4
+        }[]
       }
     }
   | {
@@ -48,7 +45,7 @@ async function init() {
     if (message.event === 'room.entered') {
       const cells = document.querySelectorAll('[data-board-cell]')
 
-      for (const ship of message.data.player.ships) {
+      for (const ship of message.data.ships) {
         const start = cells[ship.starts_at]
 
         start.setAttribute('data-filled', 'true')
@@ -62,6 +59,11 @@ async function init() {
           next.setAttribute('data-filled', 'true')
           offset++
         }
+      }
+
+      if (message.data.has_opponent) {
+        const board = document.querySelector('[data-board]:last-child')
+        board?.setAttribute('data-disabled', 'false')
       }
     }
 
