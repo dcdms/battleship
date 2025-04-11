@@ -22,6 +22,7 @@ type WebSocketMessage =
   | {
       event: 'opponent.entered'
     }
+  | { event: 'opponent.left' }
 
 async function init() {
   const params = new URLSearchParams(window.location.search)
@@ -70,6 +71,11 @@ async function init() {
     if (message.event === 'opponent.entered') {
       const board = document.querySelector('[data-board]:last-child')
       board?.setAttribute('data-disabled', 'false')
+    }
+
+    if (message.event === 'opponent.left') {
+      const board = document.querySelector('[data-board]:last-child')
+      board?.setAttribute('data-disabled', 'true')
     }
   })
 }
