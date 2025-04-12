@@ -1,28 +1,31 @@
 const API_BASE_URL = 'http://localhost:3000'
 
-const INCREMENTS_BY_DIRECTION = {
-  up: -10,
-  right: 1,
-  down: 10,
-  left: -1,
-}
-
 type WebSocketMessage =
   | {
       event: 'room.entered'
       data: {
+        board: ('EMPTY' | 'HITTED' | 'SHIP' | 'HITTED_SHIP')[]
         has_opponent: boolean
-        ships: {
-          starts_at: number
-          direction: 'up' | 'right' | 'down' | 'left'
-          length: 1 | 2 | 3 | 4
-        }[]
+        has_turn: boolean
       }
     }
   | {
       event: 'opponent.entered'
     }
   | { event: 'opponent.left' }
+  | {
+      event: 'opponent.cell.hitted'
+      data: {
+        index: number
+        hitted_ship: boolean
+      }
+    }
+  | {
+      event: 'cell.chosen'
+      data: {
+        index: number
+      }
+    }
 
 async function init() {
   const params = new URLSearchParams(window.location.search)
@@ -44,37 +47,69 @@ async function init() {
     const message: WebSocketMessage = JSON.parse(msg.data)
 
     if (message.event === 'room.entered') {
-      const cells = document.querySelectorAll('[data-board-cell]')
+      const messageElement = document.querySelector('[data-message]')
 
-      for (const ship of message.data.ships) {
-        const start = cells[ship.starts_at]
+      if (messageElement) {
+        messageElement.innerHTML = message.data.has_opponent
+          ? message.data.has_turn
+            ? 'YOUR TURN'
+            : 'OPPONENT TURN'
+          : 'SEND THIS LINK TO A FRIEND'
+      }
 
-        start.setAttribute('data-filled', 'true')
+      const cells = document.querySelectorAll(
+        '[data-board]:first-child [data-board-cell]',
+      )
 
-        let offset = 0
-
-        while (offset < ship.length) {
-          const increment = INCREMENTS_BY_DIRECTION[ship.direction]
-          const next = cells[ship.starts_at + offset * increment]
-
-          next.setAttribute('data-filled', 'true')
-          offset++
+      for (const [index, cell] of message.data.board.entries()) {
+        if (cell === 'SHIP') {
+          const element = cells[index]
+          element.setAttribute('data-filled', 'true')
         }
       }
 
       if (message.data.has_opponent) {
         const board = document.querySelector('[data-board]:last-child')
         board?.setAttribute('data-disabled', 'false')
+
+        const cells = document.querySelectorAll(
+          '[data-board]:last-child [data-board-cell]',
+        )
+
+        cells.forEach((cell, index) => {
+          cell.addEventListener('click', () => {
+            const message = {
+              event: 'cell.chosen',
+              data: { index },
+            }
+
+            socket.send(JSON.stringify(message))
+          })
+        })
       }
     }
 
     if (message.event === 'opponent.entered') {
       const board = document.querySelector('[data-board]:last-child')
+
+      const messageElement = document.querySelector('[data-message]')
+
+      if (messageElement) {
+        messageElement.innerHTML = 'YOUR TURN'
+      }
+
       board?.setAttribute('data-disabled', 'false')
     }
 
     if (message.event === 'opponent.left') {
       const board = document.querySelector('[data-board]:last-child')
+
+      const messageElement = document.querySelector('[data-message]')
+
+      if (messageElement) {
+        messageElement.innerHTML = 'YOUR TURN'
+      }      
+
       board?.setAttribute('data-disabled', 'true')
     }
   })
