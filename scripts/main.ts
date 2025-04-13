@@ -90,22 +90,37 @@ async function init() {
     }
 
     if (message.event === 'opponent.entered') {
-      const board = document.querySelector('[data-board]:last-child')
-
       const messageElement = document.querySelector('[data-message]')
 
       if (messageElement) {
         messageElement.innerHTML = 'YOUR TURN'
       }
 
+      const board = document.querySelector('[data-board]:last-child')
+
       board?.setAttribute('data-disabled', 'false')
+
+      const cells = document.querySelectorAll(
+        '[data-board]:last-child [data-board-cell]',
+      )
+
+      cells.forEach((cell, index) => {
+        cell.addEventListener('click', () => {
+          const message = {
+            event: 'cell.chosen',
+            data: { index },
+          }
+
+          socket.send(JSON.stringify(message))
+        })
+      })
     }
 
     if (message.event === 'opponent.left') {
       const messageElement = document.querySelector('[data-message]')
 
       if (messageElement) {
-        messageElement.innerHTML = 'YOUR TURN'
+        messageElement.innerHTML = 'SEND THIS LINK TO A FRIEND'
       }
 
       const board = document.querySelector('[data-board]:last-child')
