@@ -17,7 +17,7 @@ type WebSocketMessage =
       event: 'opponent.cell.hitted'
       data: {
         index: number
-        hitted_ship: boolean
+        has_ship: boolean
       }
     }
   | {
@@ -102,15 +102,48 @@ async function init() {
     }
 
     if (message.event === 'opponent.left') {
-      const board = document.querySelector('[data-board]:last-child')
-
       const messageElement = document.querySelector('[data-message]')
 
       if (messageElement) {
         messageElement.innerHTML = 'YOUR TURN'
-      }      
+      }
+
+      const board = document.querySelector('[data-board]:last-child')
 
       board?.setAttribute('data-disabled', 'true')
+
+      const cells = document.querySelectorAll(
+        '[data-board]:last-child [data-board-cell]',
+      )
+
+      cells.forEach((cell) => {
+        cell.removeAttribute('data-hitted')
+        cell.removeAttribute('data-has-ship')
+      })
+    }
+
+    if (message.event === 'cell.chosen') {
+      const cell = document.querySelector(
+        '[data-board]:first-child [data-board-cell]:nth-child(' +
+          (message.data.index + 1) +
+          ')',
+      )
+
+      cell?.setAttribute('data-hitted', 'true')
+    }
+
+    if (message.event === 'opponent.cell.hitted') {
+      const cell = document.querySelector(
+        '[data-board]:last-child [data-board-cell]:nth-child(' +
+          (message.data.index + 1) +
+          ')',
+      )
+
+      cell?.setAttribute('data-hitted', 'true')
+
+      if (message.data.has_ship) {
+        cell?.setAttribute('data-has-ship', 'true')
+      }
     }
   })
 }
