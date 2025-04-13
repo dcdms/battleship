@@ -12,20 +12,32 @@ type WebSocketMessage =
   | {
       event: 'opponent.entered'
     }
-  | { event: 'opponent.left' }
+  | {
+      event: 'opponent.left'
+      data: { board: ('EMPTY' | 'HITTED' | 'SHIP' | 'HITTED_SHIP')[] }
+    }
   | {
       event: 'opponent.cell.hitted'
       data: {
         index: number
         has_ship: boolean
+        won: boolean
       }
     }
   | {
-      event: 'cell.chosen'
+      event: 'cell.hitted'
       data: {
         index: number
+        lost: boolean
       }
     }
+
+interface CellChosenEvent {
+  event: 'cell.chosen'
+  data: { index: number }
+}
+
+let cellListener: AbortController
 
 async function init() {
   const params = new URLSearchParams(window.location.search)
@@ -76,14 +88,11 @@ async function init() {
           '[data-board]:last-child [data-board-cell]',
         )
 
-        cells.forEach((cell, index) => {
-          cell.addEventListener('click', () => {
-            const message = {
-              event: 'cell.chosen',
-              data: { index },
-            }
+        cellListener = new AbortController()
 
-            socket.send(JSON.stringify(message))
+        cells.forEach((cell, index) => {
+          cell.addEventListener('click', () => chooseCell(socket, index), {
+            signal: cellListener.signal,
           })
         })
       }
@@ -104,14 +113,11 @@ async function init() {
         '[data-board]:last-child [data-board-cell]',
       )
 
-      cells.forEach((cell, index) => {
-        cell.addEventListener('click', () => {
-          const message = {
-            event: 'cell.chosen',
-            data: { index },
-          }
+      cellListener = new AbortController()
 
-          socket.send(JSON.stringify(message))
+      cells.forEach((cell, index) => {
+        cell.addEventListener('click', () => chooseCell(socket, index), {
+          signal: cellListener.signal,
         })
       })
     }
@@ -123,21 +129,34 @@ async function init() {
         messageElement.innerHTML = 'SEND THIS LINK TO A FRIEND'
       }
 
-      const board = document.querySelector('[data-board]:last-child')
-
-      board?.setAttribute('data-disabled', 'true')
-
       const cells = document.querySelectorAll(
+        '[data-board]:first-child [data-board-cell]',
+      )
+
+      for (const [index, cell] of message.data.board.entries()) {
+        const element = cells[index]
+
+        element.setAttribute('data-hitted', 'false')
+        element.setAttribute('data-has-ship', String(cell === 'SHIP'))
+      }
+
+      const opponentBoard = document.querySelector('[data-board]:last-child')
+
+      opponentBoard?.setAttribute('data-disabled', 'true')
+
+      const opponentCells = document.querySelectorAll(
         '[data-board]:last-child [data-board-cell]',
       )
 
-      cells.forEach((cell) => {
+      opponentCells.forEach((cell) => {
+        cellListener.abort()
+
         cell.removeAttribute('data-hitted')
         cell.removeAttribute('data-has-ship')
       })
     }
 
-    if (message.event === 'cell.chosen') {
+    if (message.event === 'cell.hitted') {
       const cell = document.querySelector(
         '[data-board]:first-child [data-board-cell]:nth-child(' +
           (message.data.index + 1) +
@@ -145,6 +164,10 @@ async function init() {
       )
 
       cell?.setAttribute('data-hitted', 'true')
+
+      if (message.data.lost) {
+        alert('YOU LOST!')
+      }
     }
 
     if (message.event === 'opponent.cell.hitted') {
@@ -158,9 +181,22 @@ async function init() {
 
       if (message.data.has_ship) {
         cell?.setAttribute('data-has-ship', 'true')
+
+        if (message.data.won) {
+          alert('YOU WON!')
+        }
       }
     }
   })
+}
+
+function chooseCell(socket: WebSocket, index: number) {
+  const message: CellChosenEvent = {
+    event: 'cell.chosen',
+    data: { index },
+  }
+
+  socket.send(JSON.stringify(message))
 }
 
 init()
