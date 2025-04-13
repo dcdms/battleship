@@ -7,7 +7,7 @@
     "start": "concurrently \"live-server public\" \"bun ts:compile -- --watch\" \"bun css:compile -- --watch\"",
     "build": "bun ts:compile && bun css:compile",
     "ts:compile": "swc scripts -d public/_build",
-    "css:compile": "tailwindcss -i styles/globals.css -o public/_build/styles/globals.css"
+    "css:compile": "tailwindcss -i styles/globals.css -o public/_build/styles/globals.css --minify"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.0-beta.1",

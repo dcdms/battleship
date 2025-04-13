@@ -6,6 +6,7 @@
     "useIgnoreFile": false
   },
   "files": {
+    "includes": ["**", "!public/_build/**"],
     "ignoreUnknown": false
   },
   "formatter": {
