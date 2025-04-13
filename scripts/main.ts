@@ -64,7 +64,7 @@ async function init() {
       for (const [index, cell] of message.data.board.entries()) {
         if (cell === 'SHIP') {
           const element = cells[index]
-          element.setAttribute('data-filled', 'true')
+          element.setAttribute('data-has-ship', 'true')
         }
       }
 
