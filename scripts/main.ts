@@ -148,9 +148,9 @@ async function init() {
         '[data-board]:last-child [data-board-cell]',
       )
 
-      opponentCells.forEach((cell) => {
-        cellListener.abort()
+      cellListener.abort()
 
+      opponentCells.forEach((cell) => {
         cell.removeAttribute('data-hitted')
         cell.removeAttribute('data-has-ship')
       })
@@ -166,7 +166,16 @@ async function init() {
       cell?.setAttribute('data-hitted', 'true')
 
       if (message.data.lost) {
-        alert('YOU LOST!')
+        document.body.setAttribute('data-scroll-locked', '')
+
+        const dialog = document.querySelector('[data-dialog]')
+        dialog?.setAttribute('data-state', 'open')
+
+        const result = document.querySelector('[data-dialog-message]')
+
+        if (result) {
+          result.innerHTML = 'YOU LOST!'
+        }
       }
     }
 
@@ -183,7 +192,16 @@ async function init() {
         cell?.setAttribute('data-has-ship', 'true')
 
         if (message.data.won) {
-          alert('YOU WON!')
+          document.body.setAttribute('data-scroll-locked', '')
+
+          const dialog = document.querySelector('[data-dialog]')
+          dialog?.setAttribute('data-state', 'open')
+
+          const result = document.querySelector('[data-dialog-message]')
+
+          if (result) {
+            result.innerHTML = 'YOU WON!'
+          }
         }
       }
     }

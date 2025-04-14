@@ -13,7 +13,7 @@
     <title>Battleship</title>
   </head>
   <body
-    class="flex flex-col gap-4 justify-center min-h-screen items-center bg-blue text-black"
+    class="flex flex-col gap-4 justify-center min-h-screen items-center bg-blue text-black data-[scroll-locked]:overflow-hidden data-[scroll-locked]:overscroll-contain"
   >
     <h1 class="font-bold text-2xl" data-message>CONNECTING TO ROOM...</h1>
 
@@ -1893,6 +1893,19 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div
+      class="hidden bg-white text-black data-[state=open]:flex items-center justify-center flex-col gap-4 absolute h-64 w-full top-1/2 inset-0 -translate-y-1/2"
+      role="dialog"
+      aria-labelledby="dialog-title"
+      data-dialog
+    >
+      <h2 id="dialog-title" class="text-2xl font-bold" data-dialog-message>
+        YOU WON!
+      </h2>
+
+      <button data-restart-button>RESTART</button>
     </div>
 
     <script src="/_build/scripts/main.js"></script>
