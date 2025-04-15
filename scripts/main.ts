@@ -1,6 +1,5 @@
 import { API_BASE_URL } from '@/constants'
 import { renderBlankBoard } from '@/utils/render-blank-board'
-import { shootCell } from '@/utils/shoot-cell'
 
 type BlankBoard = ('EMPTY' | 'SHIP')[]
 
@@ -39,8 +38,6 @@ type WebSocketMessage =
       event: 'restarted'
       data: { board: BlankBoard }
     }
-
-let cellListener: AbortController
 
 const elements = {
   message: document.querySelector('[data-message]')!,
@@ -85,6 +82,17 @@ async function init() {
     socket.send(JSON.stringify({ event: 'restart', data: {} }))
   })
 
+  elements.boards.opponent.cells.forEach((cell, index) => {
+    cell.addEventListener('click', () => {
+      socket.send(
+        JSON.stringify({
+          event: 'cell.shot',
+          data: { index },
+        }),
+      )
+    })
+  })
+
   socket.addEventListener('message', (msg: MessageEvent<string>) => {
     const message: WebSocketMessage = JSON.parse(msg.data)
 
@@ -97,40 +105,28 @@ async function init() {
 
       renderBlankBoard(message.data.board, elements.boards.own.cells)
 
-      if (message.data.has_opponent) {
-        elements.boards.opponent.root.setAttribute('data-disabled', 'false')
-        cellListener = new AbortController()
-
+      if (!message.data.has_opponent) {
         elements.boards.opponent.cells.forEach((cell, index) => {
-          cell.addEventListener('click', () => shootCell(socket, index), {
-            signal: cellListener.signal,
-          })
+          cell.setAttribute('disabled', '')
         })
       }
     }
 
     if (message.event === 'opponent.entered') {
       elements.message.innerHTML = 'YOUR TURN'
-      elements.boards.opponent.root.setAttribute('data-disabled', 'false')
 
-      cellListener = new AbortController()
-
-      elements.boards.opponent.cells.forEach((cell, index) => {
-        cell.addEventListener('click', () => shootCell(socket, index), {
-          signal: cellListener.signal,
-        })
+      elements.boards.opponent.cells.forEach((cell) => {
+        cell.removeAttribute('disabled')
       })
     }
 
     if (message.event === 'opponent.left') {
       elements.message.innerHTML = 'SEND THIS LINK TO A FRIEND'
+
       renderBlankBoard(message.data.board, elements.boards.own.cells)
 
-      elements.boards.opponent.root.setAttribute('data-disabled', 'true')
-
-      cellListener.abort()
-
       elements.boards.opponent.cells.forEach((cell) => {
+        cell.setAttribute('disabled', '')
         cell.removeAttribute('data-shot')
         cell.removeAttribute('data-has-ship')
       })
