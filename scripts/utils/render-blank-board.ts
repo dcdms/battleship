@@ -5,7 +5,7 @@ export function renderBlankBoard(
   for (const [index, content] of board.entries()) {
     const cell = cells[index]
 
-    cell.setAttribute('data-hitted', 'false')
+    cell.setAttribute('data-shot', 'false')
     cell.setAttribute('data-has-ship', String(content === 'SHIP'))
   }
 }

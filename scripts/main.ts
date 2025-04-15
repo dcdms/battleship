@@ -21,7 +21,7 @@ type WebSocketMessage =
       data: { board: BlankBoard }
     }
   | {
-      event: 'opponent.cell.hitted'
+      event: 'opponent.cell.shot.result'
       data: {
         index: number
         has_ship: boolean
@@ -29,7 +29,7 @@ type WebSocketMessage =
       }
     }
   | {
-      event: 'cell.hitted'
+      event: 'cell.shot.result'
       data: {
         index: number
         lost: boolean
@@ -139,7 +139,7 @@ async function init() {
       document.body.removeAttribute('data-scroll-locked')
     }
 
-    if (message.event === 'cell.hitted') {
+    if (message.event === 'cell.shot.result') {
       const cell = elements.boards.own.cells[message.data.index]
       cell.setAttribute('data-shot', 'true')
 
@@ -151,7 +151,7 @@ async function init() {
       }
     }
 
-    if (message.event === 'opponent.cell.hitted') {
+    if (message.event === 'opponent.cell.shot.result') {
       const cell = elements.boards.opponent.cells[message.data.index]
       cell.setAttribute('data-shot', 'true')
 

@@ -1,6 +1,6 @@
 export function shootCell(socket: WebSocket, index: number) {
   const message = {
-    event: 'cell.chosen',
+    event: 'cell.shot',
     data: { index },
   }
 
