@@ -131,7 +131,7 @@ async function init() {
       cellListener.abort()
 
       elements.boards.opponent.cells.forEach((cell) => {
-        cell.removeAttribute('data-hitted')
+        cell.removeAttribute('data-shot')
         cell.removeAttribute('data-has-ship')
       })
 
@@ -141,7 +141,7 @@ async function init() {
 
     if (message.event === 'cell.hitted') {
       const cell = elements.boards.own.cells[message.data.index]
-      cell.setAttribute('data-hitted', 'true')
+      cell.setAttribute('data-shot', 'true')
 
       if (message.data.lost) {
         document.body.setAttribute('data-scroll-locked', '')
@@ -153,7 +153,7 @@ async function init() {
 
     if (message.event === 'opponent.cell.hitted') {
       const cell = elements.boards.opponent.cells[message.data.index]
-      cell.setAttribute('data-hitted', 'true')
+      cell.setAttribute('data-shot', 'true')
 
       if (message.data.has_ship) {
         cell.setAttribute('data-has-ship', 'true')
@@ -174,7 +174,7 @@ async function init() {
       renderBlankBoard(message.data.board, elements.boards.own.cells)
 
       elements.boards.opponent.cells.forEach((cell) => {
-        cell.removeAttribute('data-hitted')
+        cell.removeAttribute('data-shot')
         cell.removeAttribute('data-has-ship')
       })
     }
