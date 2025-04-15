@@ -105,8 +105,8 @@ async function init() {
 
       renderBlankBoard(message.data.board, elements.boards.own.cells)
 
-      if (!message.data.has_opponent) {
-        elements.boards.opponent.cells.forEach((cell, index) => {
+      if (!message.data.has_opponent || !message.data.has_turn) {
+        elements.boards.opponent.cells.forEach((cell) => {
           cell.setAttribute('disabled', '')
         })
       }
@@ -137,7 +137,18 @@ async function init() {
 
     if (message.event === 'cell.shot.result') {
       const cell = elements.boards.own.cells[message.data.index]
+
       cell.setAttribute('data-shot', 'true')
+
+      if (cell.getAttribute('data-has-ship') !== 'true') {
+        elements.message.innerHTML = 'YOUR TURN'
+
+        elements.boards.opponent.cells.forEach((cell) => {
+          cell.removeAttribute('disabled')
+        })
+
+        return
+      }
 
       if (message.data.lost) {
         document.body.setAttribute('data-scroll-locked', '')
@@ -151,15 +162,23 @@ async function init() {
       const cell = elements.boards.opponent.cells[message.data.index]
       cell.setAttribute('data-shot', 'true')
 
-      if (message.data.has_ship) {
-        cell.setAttribute('data-has-ship', 'true')
+      if (!message.data.has_ship) {
+        elements.message.innerHTML = 'OPPONENT TURN'
 
-        if (message.data.won) {
-          document.body.setAttribute('data-scroll-locked', '')
+        elements.boards.opponent.cells.forEach((cell) => {
+          cell.setAttribute('disabled', '')
+        })
 
-          elements.dialog.root.setAttribute('data-state', 'open')
-          elements.dialog.message.innerHTML = 'YOU WON!'
-        }
+        return
+      }
+
+      cell.setAttribute('data-has-ship', 'true')
+
+      if (message.data.won) {
+        document.body.setAttribute('data-scroll-locked', '')
+
+        elements.dialog.root.setAttribute('data-state', 'open')
+        elements.dialog.message.innerHTML = 'YOU WON!'
       }
     }
 
