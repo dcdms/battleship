@@ -1,10 +1,14 @@
-const API_BASE_URL = 'http://localhost:3000'
+import { API_BASE_URL } from '@/constants'
+import { renderBlankBoard } from '@/utils/render-blank-board'
+import { shootCell } from '@/utils/shoot-cell'
+
+type BlankBoard = ('EMPTY' | 'SHIP')[]
 
 type WebSocketMessage =
   | {
       event: 'room.entered'
       data: {
-        board: ('EMPTY' | 'HITTED' | 'SHIP' | 'HITTED_SHIP')[]
+        board: BlankBoard
         has_opponent: boolean
         has_turn: boolean
       }
@@ -14,7 +18,7 @@ type WebSocketMessage =
     }
   | {
       event: 'opponent.left'
-      data: { board: ('EMPTY' | 'HITTED' | 'SHIP' | 'HITTED_SHIP')[] }
+      data: { board: BlankBoard }
     }
   | {
       event: 'opponent.cell.hitted'
@@ -31,13 +35,35 @@ type WebSocketMessage =
         lost: boolean
       }
     }
-
-interface CellChosenEvent {
-  event: 'cell.chosen'
-  data: { index: number }
-}
+  | {
+      event: 'restarted'
+      data: { board: BlankBoard }
+    }
 
 let cellListener: AbortController
+
+const elements = {
+  message: document.querySelector('[data-message]')!,
+  boards: {
+    own: {
+      root: document.querySelector('[data-board]:first-child')!,
+      cells: document.querySelectorAll(
+        '[data-board]:first-child [data-board-cell]',
+      )!,
+    },
+    opponent: {
+      root: document.querySelector('[data-board]:last-child')!,
+      cells: document.querySelectorAll(
+        '[data-board]:last-child [data-board-cell]',
+      )!,
+    },
+  },
+  dialog: {
+    root: document.querySelector('[data-dialog]')!,
+    message: document.querySelector('[data-dialog-message]')!,
+    restart: document.querySelector('[data-dialog-restart]')!,
+  },
+}
 
 async function init() {
   const params = new URLSearchParams(window.location.search)
@@ -55,43 +81,28 @@ async function init() {
 
   const socket = new WebSocket(API_BASE_URL + '/rooms/' + room_id)
 
+  elements.dialog.restart.addEventListener('click', () => {
+    socket.send(JSON.stringify({ event: 'restart', data: {} }))
+  })
+
   socket.addEventListener('message', (msg: MessageEvent<string>) => {
     const message: WebSocketMessage = JSON.parse(msg.data)
 
     if (message.event === 'room.entered') {
-      const messageElement = document.querySelector('[data-message]')
+      elements.message.innerHTML = message.data.has_opponent
+        ? message.data.has_turn
+          ? 'YOUR TURN'
+          : 'OPPONENT TURN'
+        : 'SEND THIS LINK TO A FRIEND'
 
-      if (messageElement) {
-        messageElement.innerHTML = message.data.has_opponent
-          ? message.data.has_turn
-            ? 'YOUR TURN'
-            : 'OPPONENT TURN'
-          : 'SEND THIS LINK TO A FRIEND'
-      }
-
-      const cells = document.querySelectorAll(
-        '[data-board]:first-child [data-board-cell]',
-      )
-
-      for (const [index, cell] of message.data.board.entries()) {
-        if (cell === 'SHIP') {
-          const element = cells[index]
-          element.setAttribute('data-has-ship', 'true')
-        }
-      }
+      renderBlankBoard(message.data.board, elements.boards.own.cells)
 
       if (message.data.has_opponent) {
-        const board = document.querySelector('[data-board]:last-child')
-        board?.setAttribute('data-disabled', 'false')
-
-        const cells = document.querySelectorAll(
-          '[data-board]:last-child [data-board-cell]',
-        )
-
+        elements.boards.opponent.root.setAttribute('data-disabled', 'false')
         cellListener = new AbortController()
 
-        cells.forEach((cell, index) => {
-          cell.addEventListener('click', () => chooseCell(socket, index), {
+        elements.boards.opponent.cells.forEach((cell, index) => {
+          cell.addEventListener('click', () => shootCell(socket, index), {
             signal: cellListener.signal,
           })
         })
@@ -99,122 +110,75 @@ async function init() {
     }
 
     if (message.event === 'opponent.entered') {
-      const messageElement = document.querySelector('[data-message]')
-
-      if (messageElement) {
-        messageElement.innerHTML = 'YOUR TURN'
-      }
-
-      const board = document.querySelector('[data-board]:last-child')
-
-      board?.setAttribute('data-disabled', 'false')
-
-      const cells = document.querySelectorAll(
-        '[data-board]:last-child [data-board-cell]',
-      )
+      elements.message.innerHTML = 'YOUR TURN'
+      elements.boards.opponent.root.setAttribute('data-disabled', 'false')
 
       cellListener = new AbortController()
 
-      cells.forEach((cell, index) => {
-        cell.addEventListener('click', () => chooseCell(socket, index), {
+      elements.boards.opponent.cells.forEach((cell, index) => {
+        cell.addEventListener('click', () => shootCell(socket, index), {
           signal: cellListener.signal,
         })
       })
     }
 
     if (message.event === 'opponent.left') {
-      const messageElement = document.querySelector('[data-message]')
+      elements.message.innerHTML = 'SEND THIS LINK TO A FRIEND'
+      renderBlankBoard(message.data.board, elements.boards.own.cells)
 
-      if (messageElement) {
-        messageElement.innerHTML = 'SEND THIS LINK TO A FRIEND'
-      }
-
-      const cells = document.querySelectorAll(
-        '[data-board]:first-child [data-board-cell]',
-      )
-
-      for (const [index, cell] of message.data.board.entries()) {
-        const element = cells[index]
-
-        element.setAttribute('data-hitted', 'false')
-        element.setAttribute('data-has-ship', String(cell === 'SHIP'))
-      }
-
-      const opponentBoard = document.querySelector('[data-board]:last-child')
-
-      opponentBoard?.setAttribute('data-disabled', 'true')
-
-      const opponentCells = document.querySelectorAll(
-        '[data-board]:last-child [data-board-cell]',
-      )
+      elements.boards.opponent.root.setAttribute('data-disabled', 'true')
 
       cellListener.abort()
 
-      opponentCells.forEach((cell) => {
+      elements.boards.opponent.cells.forEach((cell) => {
         cell.removeAttribute('data-hitted')
         cell.removeAttribute('data-has-ship')
       })
+
+      elements.dialog.root.setAttribute('data-state', 'closed')
+      document.body.removeAttribute('data-scroll-locked')
     }
 
     if (message.event === 'cell.hitted') {
-      const cell = document.querySelector(
-        '[data-board]:first-child [data-board-cell]:nth-child(' +
-          (message.data.index + 1) +
-          ')',
-      )
-
-      cell?.setAttribute('data-hitted', 'true')
+      const cell = elements.boards.own.cells[message.data.index]
+      cell.setAttribute('data-hitted', 'true')
 
       if (message.data.lost) {
         document.body.setAttribute('data-scroll-locked', '')
 
-        const dialog = document.querySelector('[data-dialog]')
-        dialog?.setAttribute('data-state', 'open')
-
-        const result = document.querySelector('[data-dialog-message]')
-
-        if (result) {
-          result.innerHTML = 'YOU LOST!'
-        }
+        elements.dialog.root.setAttribute('data-state', 'open')
+        elements.dialog.message.innerHTML = 'YOU LOST!'
       }
     }
 
     if (message.event === 'opponent.cell.hitted') {
-      const cell = document.querySelector(
-        '[data-board]:last-child [data-board-cell]:nth-child(' +
-          (message.data.index + 1) +
-          ')',
-      )
-
-      cell?.setAttribute('data-hitted', 'true')
+      const cell = elements.boards.opponent.cells[message.data.index]
+      cell.setAttribute('data-hitted', 'true')
 
       if (message.data.has_ship) {
-        cell?.setAttribute('data-has-ship', 'true')
+        cell.setAttribute('data-has-ship', 'true')
 
         if (message.data.won) {
           document.body.setAttribute('data-scroll-locked', '')
 
-          const dialog = document.querySelector('[data-dialog]')
-          dialog?.setAttribute('data-state', 'open')
-
-          const result = document.querySelector('[data-dialog-message]')
-
-          if (result) {
-            result.innerHTML = 'YOU WON!'
-          }
+          elements.dialog.root.setAttribute('data-state', 'open')
+          elements.dialog.message.innerHTML = 'YOU WON!'
         }
       }
     }
+
+    if (message.event === 'restarted') {
+      document.body.removeAttribute('data-scroll-locked')
+      elements.dialog.root.setAttribute('data-state', 'closed')
+
+      renderBlankBoard(message.data.board, elements.boards.own.cells)
+
+      elements.boards.opponent.cells.forEach((cell) => {
+        cell.removeAttribute('data-hitted')
+        cell.removeAttribute('data-has-ship')
+      })
+    }
   })
-}
-
-function chooseCell(socket: WebSocket, index: number) {
-  const message: CellChosenEvent = {
-    event: 'cell.chosen',
-    data: { index },
-  }
-
-  socket.send(JSON.stringify(message))
 }
 
 init()
